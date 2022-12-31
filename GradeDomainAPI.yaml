@@ -3,11 +3,10 @@ info:
   title: Grade Domain API
   description: An API used for CRUD operations on grades for players
   version: 1.0.0
-paths:
+paths:                
   /grades:
-    summary: Represent any operations done on the grades for students
     post:
-      description: used for creating schedule
+      summary: used for creating grades
       requestBody:
         description: Mandatory data needed to create Grade
         required: true
@@ -16,6 +15,8 @@ paths:
             schema:
               type: object
               properties:
+                grade:
+                  type: string
                 name: 
                   type: string 
                 id: 
@@ -35,12 +36,13 @@ paths:
               schema:
                 type: string
                 example: "Grade Not Successfully Entered"
+
   /grades/{id}:
     get:
       summary: Returns the grade of the student
       parameters:
         - in: path
-          name: id
+          name: gradeId
           schema:
             type: integer
           required: true
@@ -60,12 +62,61 @@ paths:
               schema:
                 type: string
                 example: "Grade Not Successfully Retreived"
-
-
-
-
-
-
-                
-
-
+    put:
+      summary: Updates a grade
+      parameters:
+        - name: gradeId
+          in: path
+          required: true
+          description: Id Number of the grade
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+      requestBody:
+        description: Body with updated grade
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                grade:
+                  type: string
+      responses:
+        '200':
+          description: A message that confirms the successful update of the grade
+        '400':
+          description: A message communicating that the grade could not be updated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reasonForFailure:
+                    type: string
+                    example: Grade was not in range 'A-F'
+    delete:
+      summary: Deletes a grade
+      parameters:
+        - name: gradeId
+          in: path
+          required: true
+          description: Id Number of the grade
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: A message that confirms the deletion of the grade.
+        '400':
+          description: A message communicating that the grade could not be deleted.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reasonForFailure:
+                    type: string
+                    example: Invalid Grade Id
