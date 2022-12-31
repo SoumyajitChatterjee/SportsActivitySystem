@@ -1,0 +1,71 @@
+openapi: 3.0.0
+info:
+  title: Grade Domain API
+  description: An API used for CRUD operations on grades for players
+  version: 1.0.0
+paths:
+  /grades:
+    summary: Represent any operations done on the grades for students
+    post:
+      description: used for creating schedule
+      requestBody:
+        description: Mandatory data needed to create Grade
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: 
+                  type: string 
+                id: 
+                  type: string
+      responses:
+        '200':
+          description: Success message sent from the requested API
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Grade Successfully Entered"
+        '400':
+          description: Failure message sent from the requested API
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Grade Not Successfully Entered"
+  /grades/{id}:
+    get:
+      summary: Returns the grade of the student
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Numeric id of player to retreive
+      responses:
+        '200':
+          description: Grade Successfully Retreived
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "A"
+        '400':
+          description: Failure message sent from the requested API
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Grade Not Successfully Retreived"
+
+
+
+
+
+
+                
+
+
