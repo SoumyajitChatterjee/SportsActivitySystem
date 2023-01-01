@@ -6,8 +6,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.Optional;
 import org.springframework.beans.BeanUtils;
 
-import com.lpc.module.grading.Models.UserRepository;
 import com.lpc.module.grading.Models.Grade;
+import com.lpc.module.grading.Repository.UserRepository;
+import com.lpc.module.grading.Utils.GradeValidator;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,10 @@ public class GradeManagementService{
     private UserRepository userRepository;
 
     public @ResponseBody Optional<Grade>  createGrade(Grade grade) {
+        GradeValidator gv = new GradeValidator();
+        if(!gv.checkIfGradeValid(grade.getGrade())){
+            return userRepository.findById(-1);
+        }
         userRepository.save(grade);
         return userRepository.findById(grade.getId());
     }
@@ -40,6 +45,10 @@ public class GradeManagementService{
     }
 
     public @ResponseBody Optional<Grade> updateGrade(int justId, Grade grade) {
+        GradeValidator gv = new GradeValidator();
+        if(!gv.checkIfGradeValid(grade.getGrade())){
+            return userRepository.findById(-1);
+        }
         Grade retGrade = userRepository.findById(justId).get();
         BeanUtils.copyProperties(grade, retGrade);
         retGrade.setId(justId);
@@ -48,6 +57,10 @@ public class GradeManagementService{
     }
 
     public @ResponseBody Optional<Grade> partiallyUpdateGrade(int gradeId, String grade) {
+        GradeValidator gv = new GradeValidator();
+        if(!gv.checkIfGradeValid(grade)){
+            return userRepository.findById(-1);
+        }
         Grade retGrade = userRepository.findById(gradeId).get();
         retGrade.setGrade(grade);
         userRepository.save(retGrade);
